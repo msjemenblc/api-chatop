@@ -23,7 +23,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(unique = true)
     private String email;
@@ -43,5 +43,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Message> messages;
-
+    
 }

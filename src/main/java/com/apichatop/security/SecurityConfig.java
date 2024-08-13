@@ -3,6 +3,7 @@ package com.apichatop.security;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +30,8 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private String jwtKey = "q0iUICq1TwPlYA4LRPSzgdMP0i7YNXKl";
+    @Value("${app.security.jwt.secret-key}")
+    private String jwtSecret;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
@@ -52,15 +54,15 @@ public class SecurityConfig {
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        return new NimbusJwtEncoder(new ImmutableSecret<>(this.jwtKey.getBytes()));
+        return new NimbusJwtEncoder(new ImmutableSecret<>(this.jwtSecret.getBytes()));
     }
 
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKeySpec secretKey = new SecretKeySpec(
-            this.jwtKey.getBytes(), 
+            this.jwtSecret.getBytes(), 
             0, 
-            this.jwtKey.getBytes().length,
+            this.jwtSecret.getBytes().length,
             "RSA"
         );
         return NimbusJwtDecoder.withSecretKey(secretKey).macAlgorithm(MacAlgorithm.HS256).build();

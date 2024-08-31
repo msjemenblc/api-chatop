@@ -1,55 +1,38 @@
 package com.apichatop.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apichatop.model.Rental;
+import com.apichatop.dto.responses.RentalDTO;
 import com.apichatop.service.RentalService;
 
 @RestController
+@RequestMapping("/api/rentals")
 public class RentalController {
 
     @Autowired
     private RentalService rentalService;
 
-    /**
-    * Read - Get one rental 
-    * @param id The id of the rental
-    * @return An Rental object full filled
-    */
-	@GetMapping("/api/rentals/{id}")
-	public Rental getRental(@PathVariable("id") final Long id) {
-		Optional<Rental> rental = rentalService.getRental(id);
-		if(rental.isPresent()) {
-			return rental.get();
-		} else {
-			return null;
-		}
-	}
-
-    /**
-    * Read - Get all rentals
-    * @return - An Iterable object of Rental full filled
-    */
-    @GetMapping("/api/rentals")
-    public Iterable<Rental> getRentals() {
-        return rentalService.getRentals();
+    @GetMapping
+    public List<RentalDTO> getAllRentals() {
+        return rentalService.getAllRentals();
     }
 
-    /**
-    * Create - Add a new rental
-    * @param rental An object rental
-    * @return The rental object saved
-    */
-	@PostMapping("/api/rentals")
-	public Rental createRental(@RequestBody Rental rental) {
-		return rentalService.saveRental(rental);
+	@GetMapping("/{id}")
+	public RentalDTO getRental(@PathVariable("id") final Long id) {
+		Optional<RentalDTO> rentalDTO = rentalService.getRental(id);
+        
+        if (rentalDTO.isPresent()) {
+            return rentalDTO.get();
+        } else {
+            throw new RuntimeException("Rental not found with id: " + id);
+        }
 	}
 
 }

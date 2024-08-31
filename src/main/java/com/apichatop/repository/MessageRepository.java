@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.apichatop.model.Message;
 
 @Repository
-public interface MessageRepository extends JpaRepository<Message, Integer> {
+public interface MessageRepository extends JpaRepository<Message, Long> {
 
 }

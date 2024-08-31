@@ -3,6 +3,8 @@ package com.apichatop.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 public class User {
 
     @Id
@@ -26,10 +29,13 @@ public class User {
     private Long id;
 
     @Column(unique = true)
+    @Size(min = 2, max = 50)
     private String email;
 
+    @Size(min = 2, max = 50)
     private String name;
 
+    @Size(min = 6, max = 100)
     private String password;
 
     @Column(name = "created_at")

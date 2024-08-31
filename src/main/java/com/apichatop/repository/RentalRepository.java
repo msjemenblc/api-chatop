@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.apichatop.model.Rental;
 
 @Repository
-public interface RentalRepository extends JpaRepository<Rental, Integer> {
+public interface RentalRepository extends JpaRepository<Rental, Long> {
 
 }

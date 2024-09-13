@@ -34,9 +34,6 @@ public class MessageController {
 
     @PostMapping
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageRequest messageRequest) {
-        
-        System.out.println(messageRequest.getRentalId());
-        System.out.println(messageRequest.getUserId());
 
         if (messageRequest.getUserId() == null || messageRequest.getRentalId() == null) {
             throw new IllegalArgumentException("User ID or Rental ID must not be null");

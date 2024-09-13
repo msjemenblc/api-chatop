@@ -44,4 +44,5 @@ public class MessageRequest {
     public void setRentalId(Long rentalId) {
         this.rentalId = rentalId;
     }
+    
 }

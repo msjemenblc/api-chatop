@@ -1,5 +1,7 @@
 package com.apichatop.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,10 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findByEmail(username)
             .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     public UserDTO registerUser(RegisterRequest registerRequest) {

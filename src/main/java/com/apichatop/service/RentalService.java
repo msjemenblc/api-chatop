@@ -38,6 +38,10 @@ public class RentalService {
         return rental.map(this::convertToDTO);
     }
 
+    public Optional<Rental> getRentalEntity(Long id) {
+        return rentalRepository.findById(id);
+    }
+
     public Rental createRental(Rental rental) {
         return rentalRepository.save(rental);
     }

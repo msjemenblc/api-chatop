@@ -21,9 +21,12 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User findByUsername(String username) {
-        return userRepository.findByEmail(username)
-            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    public Optional<User> findByEmailOrUsername(String emailOrUsername) {
+        Optional<User> user = userRepository.findByEmail(emailOrUsername);
+        if (user.isEmpty()) {
+            user = userRepository.findByName(emailOrUsername);
+        }
+        return user;
     }
 
     public Optional<User> findById(Long id) {
@@ -32,9 +35,10 @@ public class UserService {
 
     public UserDTO registerUser(RegisterRequest registerRequest) {
         boolean emailExists = userRepository.existsByEmail(registerRequest.getEmail());
+        boolean usernameExists = userRepository.existsByName(registerRequest.getName());
 
-        if (emailExists) {
-            throw new EmailAlreadyExistsException("Email already exists: " + registerRequest.getEmail());
+        if (emailExists || usernameExists) {
+            throw new EmailAlreadyExistsException("Email or username already exist: " + registerRequest.getEmail());
         }
 
         User user = new User();

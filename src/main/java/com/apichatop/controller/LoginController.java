@@ -1,6 +1,11 @@
 package com.apichatop.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,33 +45,49 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String getToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, String>> getToken(@RequestBody AuthRequest authRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
 
-            return jwtService.generateToken(authentication.getName());
+            String jwtToken = jwtService.generateToken(authentication.getName());
+
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwtToken);
+
+            return ResponseEntity.ok(response);
+
         } catch (AuthenticationException e) {
             throw new RuntimeException("Invalid credentials");
         }
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<Map<String, String>> registerUser(@RequestBody RegisterRequest registerRequest) {
         UserDTO registeredUser = userService.registerUser(registerRequest);
 
-        return jwtService.generateToken(registeredUser.getName());
+        String jwtToken = jwtService.generateToken(registeredUser.getName());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", jwtToken);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")
-    public UserDTO getCurrentUser(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<UserDTO> getCurrentUser(@RequestHeader("Authorization") String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         String jwtToken = token.substring(7);
 
         Jwt decodedJwt = jwtDecoder.decode(jwtToken);
-        String username = decodedJwt.getSubject();
+        String emailOrUsername = decodedJwt.getSubject();
 
-        User user = userService.findByUsername(username);
+        User user = userService.findByEmailOrUsername(emailOrUsername)
+                               .orElse(null);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
@@ -75,7 +96,7 @@ public class LoginController {
         userDTO.setCreatedAt(user.getCreatedAt());
         userDTO.setUpdatedAt(user.getUpdatedAt());
 
-        return userDTO;
+        return ResponseEntity.ok(userDTO);
     }
 
 }

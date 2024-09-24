@@ -2,12 +2,18 @@ package com.apichatop.dto.responses;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserDTO {
 
     private Long id;
     private String name;
     private String email;
+
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
+    
+    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     public UserDTO() {}

@@ -40,15 +40,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Pas de session, authentification par token
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/register", "api/auth/login").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/rentals/images/**").permitAll() // Autoriser l'accès public à ces routes
+                .anyRequest().authenticated() // Protéger les autres routes
             )
-            .httpBasic(Customizer.withDefaults())
-            .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())) // Utiliser OAuth2 avec JWT
             .build();
     }
+    
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

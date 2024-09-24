@@ -1,13 +1,14 @@
 package com.apichatop.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apichatop.dto.requests.MessageRequest;
-import com.apichatop.dto.responses.MessageDTO;
 import com.apichatop.model.Message;
 import com.apichatop.model.Rental;
 import com.apichatop.model.User;
@@ -33,7 +34,7 @@ public class MessageController {
     private RentalService rentalService;
 
     @PostMapping
-    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageRequest messageRequest) {
+    public ResponseEntity<Map <String, String>> createMessage(@RequestBody MessageRequest messageRequest) {
 
         if (messageRequest.getUserId() == null || messageRequest.getRentalId() == null) {
             throw new IllegalArgumentException("User ID or Rental ID must not be null");
@@ -50,11 +51,12 @@ public class MessageController {
         newMessage.setUser(user);
         newMessage.setRental(rental);
 
-        Message savedMessage = messageService.createMessage(newMessage);
+        messageService.createMessage(newMessage);
 
-        MessageDTO messageDTO = messageService.convertToDTO(savedMessage);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Message send with success");
 
-        return new ResponseEntity<>(messageDTO, HttpStatus.CREATED);
+        return ResponseEntity.ok(response);
     }
     
 }

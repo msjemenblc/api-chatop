@@ -1,6 +1,5 @@
 package com.apichatop.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,9 +56,7 @@ public class RentalService {
         rental.setName(rentalDTO.getName());
         rental.setSurface(rentalDTO.getSurface());
         rental.setPrice(rentalDTO.getPrice());
-        rental.setPicture(rentalDTO.getPicture());
         rental.setDescription(rentalDTO.getDescription());
-        rental.setUpdatedAt(LocalDateTime.now());
 
         Rental updatedRental = rentalRepository.save(rental);
         return convertToDTO(updatedRental);

@@ -3,6 +3,8 @@ package com.apichatop.dto.responses;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RentalDTO {
 
     private Long id;
@@ -11,8 +13,14 @@ public class RentalDTO {
     private BigDecimal price;
     private String picture;
     private String description;
+
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
+
+    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
+
+    @JsonProperty("owner_id")
     private Long ownerId;
 
     public RentalDTO() {}

@@ -2,15 +2,19 @@ package com.apichatop.dto.requests;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class MessageRequest {
 
     @NotBlank
     private String message;
 
     @NotBlank
+    @JsonProperty("user_id")
     private Long userId;
 
     @NotBlank
+    @JsonProperty("rental_id")
     private Long rentalId;
 
     public MessageRequest() {}

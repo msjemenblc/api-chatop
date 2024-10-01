@@ -24,8 +24,16 @@ import com.apichatop.dto.responses.UserDTO;
 import com.apichatop.model.User;
 import com.apichatop.service.JwtService;
 import com.apichatop.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Tag(
+    name = "Login Controller", 
+    description = "Opérations concernant l'utilisateur, gère les connexion ainsi que la création de token."
+)
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
@@ -44,6 +52,10 @@ public class LoginController {
         this.userService = userService;
     }
 
+    @Operation(
+        summary = "Connecte un utilisateur", 
+        description = "Vérifie les identifiants; s'ils correspondent, un token est renvoyé"
+    )
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> getToken(@RequestBody AuthRequest authRequest) {
         try {
@@ -63,6 +75,10 @@ public class LoginController {
         }
     }
 
+    @Operation(
+        summary = "Enregistre un utilisateur", 
+        description = "Vérifie si celui-ci n'est pas déjà existant; si négatif, renvoie un token"
+    )
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> registerUser(@RequestBody RegisterRequest registerRequest) {
         UserDTO registeredUser = userService.registerUser(registerRequest);
@@ -75,6 +91,10 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+        summary = "Renvoie les informations sur l'utilisateur", 
+        description = "Récupère le token de la connexion pour le décomposer et renvoyer les informations correspondantes"
+    )
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@RequestHeader("Authorization") String token) {
         if (token == null || !token.startsWith("Bearer ")) {

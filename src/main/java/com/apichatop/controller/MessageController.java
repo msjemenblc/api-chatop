@@ -16,10 +16,16 @@ import com.apichatop.service.MessageService;
 import com.apichatop.service.RentalService;
 import com.apichatop.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+@Tag(
+    name = "Message Controller",
+    description = "Opérations CRUD concernant les messages, seule la création est implémentée pour cette exercice"
+)
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
@@ -33,6 +39,10 @@ public class MessageController {
     @Autowired
     private RentalService rentalService;
 
+    @Operation(
+        summary = "Crée un nouveau message",
+        description = "Attend l'ID du créateur du message ainsi que l'ID de la location liée"
+    )
     @PostMapping
     public ResponseEntity<Map <String, String>> createMessage(@RequestBody MessageRequest messageRequest) {
 

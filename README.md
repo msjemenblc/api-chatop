@@ -88,4 +88,4 @@ https://github.com/OpenClassrooms-Student-Center/Developpez-le-back-end-en-utili
 ## Documentation de l'API avec Swagger
 L'API dispose d'une documentation Swagger pour faciliter les tests et la visualisation des endpoints :
 
-http://localhost:8080/swagger-ui.html
+http://localhost:3001/swagger-ui/index.html

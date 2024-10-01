@@ -33,6 +33,13 @@ import com.apichatop.model.User;
 import com.apichatop.service.RentalService;
 import com.apichatop.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(
+    name = "Rental Controller",
+    description = "Opérations CRUD concernant les locations (rentals)"
+)
 @RestController
 @RequestMapping("/api/rentals")
 public class RentalController {
@@ -49,6 +56,9 @@ public class RentalController {
     private static final String ASSETS_DIR = "src/main/resources/assets/";
     private static final String BASE_URL = "http://localhost:3001/api/rentals/images/";
 
+    @Operation(
+        summary = "Renvoie toutes les locations (rentals) existantes"
+    )
     @GetMapping
     public ResponseEntity<Map<String, List<RentalDTO>>> getAllRentals() {
 
@@ -58,6 +68,10 @@ public class RentalController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+        summary = "Renvoie une location (rental)",
+        description = "Cherche à l'ID renseigné; si elle n'existe pas, renvoie une erreur"
+    )
 	@GetMapping("/{id}")
 	public RentalDTO getRental(@PathVariable("id") final Long id) {
 		Optional<RentalDTO> rentalDTO = rentalService.getRental(id);
@@ -69,6 +83,10 @@ public class RentalController {
         }
 	}
 
+    @Operation(
+        summary = "Crée une nouvelle location (rental)",
+        description = "Sauvegarde l'image en local, puis enregistre la location (rental) en base de données ainsi que l'endpoint de l'image"
+    )
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Map <String, String>> createRental(
             @RequestHeader("Authorization") String token,
@@ -111,6 +129,9 @@ public class RentalController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+        summary = "Edite une location (rental) à l'ID renseigné"
+    )
     @PutMapping(path = "/{id}", consumes = {"multipart/form-data"})
     public RentalDTO updateRental(
             @PathVariable("id") Long id, 
@@ -128,6 +149,10 @@ public class RentalController {
         return rentalService.updateRental(id, rentalDTO);
     }
 
+    @Operation(
+        summary = "Affiche une image",
+        description = "Cherche un fichier correspondant à celui dans l'URL; si trouvé, l'affiche"
+    )
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {

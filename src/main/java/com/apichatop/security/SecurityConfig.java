@@ -42,7 +42,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Pas de session, authentification par token
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/rentals/images/**").permitAll() // Autoriser l'accès public à ces routes
+                .requestMatchers("/api/auth/register", 
+                "/api/auth/login", 
+                "/api/rentals/images/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**").permitAll() // Autoriser l'accès public à ces routes
                 .anyRequest().authenticated() // Protéger les autres routes
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())) // Utiliser OAuth2 avec JWT
